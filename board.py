@@ -1,5 +1,6 @@
 import itertools as itt
 import numpy as np
+import os, sys
 
 class Board:
     users = ["Robot","Human"] #Chips
@@ -79,6 +80,16 @@ class Board:
                 result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixDown,0).diagonal())]
                 if self.hasWinner(result):
                     return True
+                submatrixDown = self.grid[y:][x:].T.T
+                # TL -> BR
+                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixDown.diagonal())]
+                if self.hasWinner(result):
+                    return True
+                # BL -> TR
+                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixDown,0).diagonal())]
+                if self.hasWinner(result):
+                    return True
+                
 
     def isFull(self):
         return (np.count_nonzero(self.grid==0) == 0)

@@ -1,6 +1,6 @@
 from cmath import inf
 import numpy as np
-
+import os, sys
 
 class Robot:
     def __init__(self, piece):

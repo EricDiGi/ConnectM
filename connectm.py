@@ -19,7 +19,7 @@ def robotMove(R, turn):
     B.addPiece(column, (turn%2)+1)
 
 if __name__ == "__main__":
-    os.environ['N'], os.environ['M'], os.environ['H'] = ['10','8','0'] #sys.argv[1:]
+    os.environ['N'], os.environ['M'], os.environ['H'] = sys.argv[1:]
     print(os.environ['N'], os.environ['M'], os.environ['H'])
 
     #board is safe to build
