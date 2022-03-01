@@ -184,28 +184,18 @@ class Robot:
 
     # check hyporthical state for completeness
     def gameComplete(self):
-        # group by row
-        for i in self.hypothetical_state:
-            result = [(n, sum(1 for n in group)) for n, group in itt.groupby(i)]
-            if self.hasWinner(result):
-                return True
-        # group by column
-        for i in self.hypothetical_state.T:
-            result = [(n, sum(1 for n in group)) for n, group in itt.groupby(i)]
-            if self.hasWinner(result):
-                return True
-        # group by diagonal
-        for y in range(int(os.environ['N'])):
-            for x in range(int(os.environ['N'])):
-                submatrixUp = self.hypothetical_state[y:][x:]
-                # TL -> BR
-                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixUp.diagonal())]
-                if self.hasWinner(result):
-                    return True
-                # BL -> TR
-                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixUp,0).diagonal())]
-                if self.hasWinner(result):
-                    return True
+      for y in range(int(os.environ['N'])):
+        for x in range(int(os.environ['N'])):
+          result = [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state[y,:])]
+          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state.T[x,:])]
+          submatrixR = self.hypothetical_state[:,x:]
+          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixR.diagonal())]
+          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixR).diagonal())]
+          submatrixD = self.hypothetical_state[y:,:]
+          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixD.diagonal())]
+          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixD).diagonal())]
+          if self.hasWinner(result):
+              return True
 
     # bot runtime
     def run(self, current_state):

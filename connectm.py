@@ -53,7 +53,7 @@ if __name__ == "__main__":
         
         B.printBoard()
         if (B.gameComplete() or B.isFull()):
-            if B.isFull():
+            if B.isFull() and not B.gameComplete():
                 print("Game is a draw!")
             break
         turn += 1

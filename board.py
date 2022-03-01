@@ -50,17 +50,17 @@ class Board:
     # Look up down left right and diagonally for a win state
     def gameComplete(self):
         for y in range(int(os.environ['N'])):
-          for x in range(int(os.environ['N'])):
-            result = [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state[y,:])]
-            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state.T[x,:])]
-            submatrixR = self.hypothetical_state[:,x:]
-            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixR.diagonal())]
-            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixR).diagonal())]
-            submatrixD = self.hypothetical_state[y:,:]
-            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixD.diagonal())]
-            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixD).diagonal())]
-            if self.hasWinner(result):
-                return True
+            for x in range(int(os.environ['N'])):
+                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(self.grid[y,:])]
+                result += [(n, sum(1 for n in group)) for n, group in itt.groupby(self.grid.T[x,:])]
+                submatrixR = self.grid[:,x:]
+                result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixR.diagonal())]
+                result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixR).diagonal())]
+                submatrixD = self.grid[y:,:]
+                result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixD.diagonal())]
+                result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixD).diagonal())]
+                if self.hasWinner(result):
+                    return True
                 
     # board is full when there are no more 0s
     def isFull(self):
