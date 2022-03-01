@@ -5,8 +5,8 @@ import os, sys
 class Board:
     users = ["Robot","Human"] #Chips
     def __init__(self, first):
-        self.players = [self.users[first], self.users[first-1]] #what chip goes first
-        self.grid = np.full((int(os.environ['N']),int(os.environ['N'])), 0) #make the board
+        self.players = [self.users[first], self.users[first-1]] # what chip goes first
+        self.grid = np.full((int(os.environ['N']),int(os.environ['N'])), 0) # make the board
     
     def getRobot(self):
         return self.players.index("Robot")
@@ -80,16 +80,15 @@ class Board:
                 result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixDown,0).diagonal())]
                 if self.hasWinner(result):
                     return True
+                # had problem - this seems to work
                 submatrixDown = self.grid[y:][x:].T.T
-                # TL -> BR
                 result = [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixDown.diagonal())]
                 if self.hasWinner(result):
                     return True
-                # BL -> TR
                 result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixDown,0).diagonal())]
                 if self.hasWinner(result):
                     return True
                 
-
+    # board is full when there are no more 0s
     def isFull(self):
         return (np.count_nonzero(self.grid==0) == 0)

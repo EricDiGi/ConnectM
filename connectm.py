@@ -5,8 +5,6 @@ import os, sys
 from robot import Robot
 from board import Board
 
-
-
 def humanMove(turn):
     column = input("Column:")
     while(column == "" or int(column) > int(os.environ['N'])-1 or int(column) < 0 or B.addPiece(int(column), (turn%2)+1) == -1):
@@ -19,12 +17,15 @@ def robotMove(R, turn):
     B.addPiece(column, (turn%2)+1)
 
 if __name__ == "__main__":
+    # program has correct number of arguments
+    if(len(sys.argv) <= 3):
+        print("Wrong number of command-line arguments")
+        exit(0)
     os.environ['N'], os.environ['M'], os.environ['H'] = sys.argv[1:]
     print(os.environ['N'], os.environ['M'], os.environ['H'])
 
     #board is safe to build
-    if((int(os.environ['M']) > int(os.environ['N'])-1) 
-    or (int(os.environ['N']) not in range(3,10)) ):
+    if((int(os.environ['M']) > int(os.environ['N'])-1) or (int(os.environ['N']) not in range(3,10)) ):
         print("Invalid Board, please try again...")
         exit(0)
 

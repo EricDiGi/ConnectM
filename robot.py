@@ -10,13 +10,6 @@ class Robot:
         self.current_state = np.full((int(os.environ['N']),int(os.environ['N'])),0)
         self.hypothetical_state = np.full((int(os.environ['N']),int(os.environ['N'])),0)
 
-    # get column of most recent move
-    def getColumn(self, arr):
-        temp = arr.T
-        for i,x in enumerate(temp):
-            if(sum(x) > 0): 
-                return i
-
     def addPiece(self, col, grid):
         if grid is None:
           temp = self.hypothetical_state.T
@@ -44,6 +37,8 @@ class Robot:
           t_loc = self.addPiece(i,grid)
           t_grid = np.copy(grid)
           if(t_loc != -1):
+            # don't forget to alternate pieces
+            #hueristic ignores piece type - sim does not
             t_grid[t_loc[1]][t_loc[0]] = (self.piece+(depth%2))
             if(self.validMove(t_loc)):
                 star = self.strata(t_loc, t_grid)
@@ -75,6 +70,8 @@ class Robot:
         return False
       return True
 
+    # for following functions
+    # h is hueristic value
 
     def diag_dr(self, coord, grid=None):
       h = 1
@@ -148,6 +145,8 @@ class Robot:
           h += h
         return (h, t)
 
+    # don't need to look up because of game physics
+
     def down(self, coord, grid=None):
       h = 1
       if(coord[1]+1 >= int(os.environ['N'])):
@@ -160,6 +159,7 @@ class Robot:
           h += h
         return (h, t)
 
+    #accumulate indiv. h to collective h
     def calc_unitA(self,l):
       if l[1][0] != None:
         l[1][0] = (l[1][0][0]**2, l[1][0][1])
@@ -210,6 +210,6 @@ class Robot:
     # bot runtime
     def run(self, current_state):
         self.current_state = current_state
-        #does minmax tree
-        next_state = self.nextState(current_state.copy(), 4)
+        #does minmax tree wi a-b pruning
+        next_state = self.nextState(current_state.copy(), 4) # do 4 level tree
         return next_state[1][next_state[0].index(max(next_state[0]))][0]
