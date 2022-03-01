@@ -77,15 +77,7 @@ class Board:
                 if self.hasWinner(result):
                     return True
                 # BL -> TR
-                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixDown,0).diagonal())]
-                if self.hasWinner(result):
-                    return True
-                # had problem - this seems to work
-                submatrixDown = self.grid[y:][x:].T.T
-                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixDown.diagonal())]
-                if self.hasWinner(result):
-                    return True
-                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixDown,0).diagonal())]
+                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixDown,1).diagonal())]
                 if self.hasWinner(result):
                     return True
                 
