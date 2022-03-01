@@ -49,37 +49,18 @@ class Board:
 
     # Look up down left right and diagonally for a win state
     def gameComplete(self):
-        # group by row
-        for i in self.grid:
-            result = [(n, sum(1 for n in group)) for n, group in itt.groupby(i)]
-            if self.hasWinner(result):
-                return True
-        # group by column
-        for i in self.grid.T:
-            result = [(n, sum(1 for n in group)) for n, group in itt.groupby(i)]
-            if self.hasWinner(result):
-                return True
-        # group by diagonal
         for y in range(int(os.environ['N'])):
-            for x in range(int(os.environ['N'])):
-                submatrixUp = self.grid[y:][x:]
-                # TL -> BR
-                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixUp.diagonal())]
-                if self.hasWinner(result):
-                    return True
-                # BL -> TR
-                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixUp,0).diagonal())]
-                if self.hasWinner(result):
-                    return True
-                submatrixDown = self.grid[y:][x:].T
-                # TL -> BR
-                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixDown.diagonal())]
-                if self.hasWinner(result):
-                    return True
-                # BL -> TR
-                result = [(n, sum(1 for n in group)) for n, group in itt.groupby(np.flip(submatrixDown,1).diagonal())]
-                if self.hasWinner(result):
-                    return True
+          for x in range(int(os.environ['N'])):
+            result = [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state[y,:])]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state.T[x,:])]
+            submatrixR = self.hypothetical_state[:,x:]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixR.diagonal())]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixR).diagonal())]
+            submatrixD = self.hypothetical_state[y:,:]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixD.diagonal())]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixD).diagonal())]
+            if self.hasWinner(result):
+                return True
                 
     # board is full when there are no more 0s
     def isFull(self):
