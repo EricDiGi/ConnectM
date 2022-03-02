@@ -21,12 +21,12 @@ or
 
 `python3 connectM.py N M P`
 
-N is the annount of columns the player wishes for it to have and M is the anount of rows that the player wishes for it to have.
-It will create a board of **N x M** using whatever values you give it and the win condition is connecting m number of pieces before the your oponent does.
+N is the amount of rows and columns the player wishes for it to have, M is the win condition. A user needs to have M in a row to win.
+It will create a board of **N x N**.
 P is who you want to play first.
-0 means the robot will play first and 1 means that you the player will play first.
+0 means the robot will play first and 1 or 'h' means that you the player will play first. Any number other input will result in the robot taking the first turn.
 
 ### Features
-Right now you can only play aainst the robot since the focus of the project was programming an AI.
-For each move the board of whatever size the user dictated will be printed out. This applies for both the robot and the players moves so you can see each individual state that the board has been in leading up to the end of the game.
+Right now you can only play against the robot since the focus of the project was programming an AI.
+The game is verbose; so for each move, robot or player, the board will be printed out.
 There are three types of end game. First being that the robot wins.Second being that the player wins. Lastly being that it is a tie game. For each of these end games a message will be displayed after the last move is made showing the final state and which end game has been reached.
