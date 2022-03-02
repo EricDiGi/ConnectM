@@ -15,15 +15,15 @@ To ensure this program reaches it's full potential, it needs to be run in a main
 
 To start the game you can run the following command
 
-`python connectM.py n m p`
+`python connectM.py N M P`
 
 or
 
-`python3 connectM.py n m p`
+`python3 connectM.py N M P`
 
-n is the annount of columns you wish to have and m is the anount of rows that you wish for it to have.
-It will create a board of n X m using whatever values you give it and the win condition is connecting m number of pieces before the your oponent does.
-p is who you want to play first.
+N is the annount of columns the player wishes for it to have and M is the anount of rows that the player wishes for it to have.
+It will create a board of **n x m** using whatever values you give it and the win condition is connecting m number of pieces before the your oponent does.
+P is who you want to play first.
 0 means the robot will play first and 1 means that you the player will play first.
 
 ### Features
