@@ -22,7 +22,7 @@ or
 `python3 connectM.py N M P`
 
 N is the annount of columns the player wishes for it to have and M is the anount of rows that the player wishes for it to have.
-It will create a board of **n x m** using whatever values you give it and the win condition is connecting m number of pieces before the your oponent does.
+It will create a board of **N x M** using whatever values you give it and the win condition is connecting m number of pieces before the your oponent does.
 P is who you want to play first.
 0 means the robot will play first and 1 means that you the player will play first.
 
