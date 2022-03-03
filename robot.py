@@ -10,6 +10,13 @@ class Robot:
         self.current_state = np.full((int(os.environ['N']),int(os.environ['N'])),0)
         self.hypothetical_state = np.full((int(os.environ['N']),int(os.environ['N'])),0)
 
+    # get column of most recent move
+    def getColumn(self, arr):
+        temp = arr.T
+        for i,x in enumerate(temp):
+            if(sum(x) > 0): 
+                return i
+
     def addPiece(self, col, grid):
         if grid is None:
           temp = self.hypothetical_state.T
@@ -37,22 +44,19 @@ class Robot:
           t_loc = self.addPiece(i,grid)
           t_grid = np.copy(grid)
           if(t_loc != -1):
-            # don't forget to alternate pieces
-            #hueristic ignores piece type - sim does not
             t_grid[t_loc[1]][t_loc[0]] = (self.piece+(depth%2))
             if(self.validMove(t_loc)):
                 star = self.strata(t_loc, t_grid)
                 if (star > t_ab[0]): #if better alpha swap for best
                     t_ab[0] = star
                     loc[0] = t_loc
-                if(star < t_ab[1]): #if better beta swap for best
-                    t_ab[1] = star
-                    loc[1] = t_loc
         else:
           ns = self.nextState(np.copy(grid), depth-1, t_ab, loc)
           if(t_ab == None):
             t_ab = ns[0]
           else:
+            if t_ab[1] <= t_ab[0]:
+              return (t_ab,loc)
             if t_ab[0] > ns[0][0]: #if better alpha swap for best
                 t_ab[0] = ns[0][0]
                 loc[0] = ns[1][0]
@@ -70,8 +74,6 @@ class Robot:
         return False
       return True
 
-    # for following functions
-    # h is hueristic value
 
     def diag_dr(self, coord, grid=None):
       h = 1
@@ -145,8 +147,6 @@ class Robot:
           h += h
         return (h, t)
 
-    # don't need to look up because of game physics
-
     def down(self, coord, grid=None):
       h = 1
       if(coord[1]+1 >= int(os.environ['N'])):
@@ -159,7 +159,6 @@ class Robot:
           h += h
         return (h, t)
 
-    #accumulate indiv. h to collective h
     def calc_unitA(self,l):
       if l[1][0] != None:
         l[1][0] = (l[1][0][0]**2, l[1][0][1])
@@ -184,22 +183,22 @@ class Robot:
 
     # check hyporthical state for completeness
     def gameComplete(self):
-      for y in range(int(os.environ['N'])):
-        for x in range(int(os.environ['N'])):
-          result = [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state[y,:])]
-          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state.T[x,:])]
-          submatrixR = self.hypothetical_state[:,x:]
-          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixR.diagonal())]
-          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixR).diagonal())]
-          submatrixD = self.hypothetical_state[y:,:]
-          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixD.diagonal())]
-          result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixD).diagonal())]
-          if self.hasWinner(result):
-              return True
+        for y in range(int(os.environ['N'])):
+          for x in range(int(os.environ['N'])):
+            result = [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state[y,:])]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(self.hypothetical_state.T[x,:])]
+            submatrixR = self.hypothetical_state[:,x:]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixR.diagonal())]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixR).diagonal())]
+            submatrixD = self.hypothetical_state[y:,:]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(submatrixD.diagonal())]
+            result += [(n, sum(1 for n in group)) for n, group in itt.groupby(np.fliplr(submatrixD).diagonal())]
+            if self.hasWinner(result):
+                return True
 
     # bot runtime
     def run(self, current_state):
         self.current_state = current_state
-        #does minmax tree wi a-b pruning
-        next_state = self.nextState(current_state.copy(), 4) # do 4 level tree
-        return next_state[1][next_state[0].index(max(next_state[0]))][0]
+        #does minmax tree
+        next_state = self.nextState(current_state.copy(), 3)
+        return next_state[1][0][0]
