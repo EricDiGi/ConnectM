@@ -57,10 +57,10 @@ class Robot:
           else:
             if t_ab[1] <= t_ab[0]:
               return (t_ab,loc)
-            if t_ab[0] > ns[0][0]: #if better alpha swap for best
+            if t_ab[0] > ns[0][0] and depth%2 == 1: #if better alpha swap for best
                 t_ab[0] = ns[0][0]
                 loc[0] = ns[1][0]
-            if t_ab[1] < ns[0][1]: #if better beta swap for best
+            if t_ab[1] < ns[0][1] and depth%2 == 0: #if better beta swap for best
                 t_ab[1] = ns[0][1]
                 loc[1] = ns[1][1]
       return (t_ab, loc)
