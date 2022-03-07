@@ -25,7 +25,7 @@ if __name__ == "__main__":
     print(os.environ['N'], os.environ['M'], os.environ['H'])
 
     #board is safe to build
-    if((int(os.environ['M']) > int(os.environ['N'])-1) or (int(os.environ['N']) not in range(3,10)) ):
+    if((int(os.environ['M']) > int(os.environ['N'])-1) or (int(os.environ['N']) not in range(3,11)) ):
         print("Invalid Board, please try again...")
         exit(0)
 
