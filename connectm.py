@@ -11,7 +11,10 @@ def humanMove(turn):
         print("Invlaid Move")
         column = input("Column:")
 
-def robotMove(R, turn):
+def robotMove(R, turn, first=False):
+    if(first):
+      B.addPiece(r.randint(0,int(os.environ['N'])), (turn%2)+1)
+      return
     column = R.run(B.robotReadable())
     print("Column: " + str(column))
     B.addPiece(column, (turn%2)+1)
@@ -49,7 +52,7 @@ if __name__ == "__main__":
         if B.getTurn((turn%2)) == "Human":
             humanMove(turn)
         else:
-            robotMove(R, turn)
+            robotMove(R, turn, turn == 0)
         
         B.printBoard()
         if (B.gameComplete() or B.isFull()):
